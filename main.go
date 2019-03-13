@@ -43,8 +43,7 @@ func GetPwnedHashes(hashstr string) string {
 // FindPwnedPassword finds the given hash in a string of pwnedHashes.
 // The pwnedHashes are expected to be formatted as HASH:TIMES_PWNED\r\n
 func FindPwnedPassword(pwnedHashes string, hashstr string) string {
-	for i, value := range strings.Split(pwnedHashes, "\r\n") {
-		_ = i //TODO: idomatic handling of this?
+	for _, value := range strings.Split(pwnedHashes, "\r\n") {
 		pwnedHash := strings.Split(value, ":")
 		if pwnedHash[0] == hashstr[5:] {
 			return pwnedHash[1]
