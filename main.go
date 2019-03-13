@@ -1,3 +1,6 @@
+// Takes a password as a command line arg and prints the number of times it has been pwned according to haveibeenpwned
+//   Example: ./haveIBeenPwned Password1
+//   Output: Your password has been pwned 111658 times
 package main
 
 import (
@@ -11,18 +14,19 @@ import (
 )
 
 /*
- * TODO: Version control
- * TODO: Comments
+ * TODO: Readme
  * TODO: Tests
  */
 
+// createHash returns an sha1 hash of string.
 func createHash(str string) string {
 	hash := sha1.New()
 	hash.Write([]byte(str))
-	hashstr := strings.ToUpper(fmt.Sprintf("%x", hash.Sum(nil)))
-	return hashstr
+	return strings.ToUpper(fmt.Sprintf("%x", hash.Sum(nil)))
 }
 
+// getPwnedHashes gets a list of hashes from the pwnedpasswords api that are similair to the hastr.
+// The pwnedpasswords api only requires the first 5 characters of the hash and returns all similair hashes.
 func getPwnedHashes(hashstr string) string {
 	res, err := http.Get(fmt.Sprintf("https://api.pwnedpasswords.com/range/%s", hashstr[0:5]))
 	if err != nil {
@@ -33,10 +37,11 @@ func getPwnedHashes(hashstr string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	bs := string(body)
-	return bs
+	return string(body)
 }
 
+// findPwnedPassword finds the given hash in a string of pwnedHashes.
+// The pwnedHashes are expected to be formatted as HASH:TIMES_PWNED\r\n
 func findPwnedPassword(pwnedHashes string, hashstr string) string {
 	for i, value := range strings.Split(pwnedHashes, "\r\n") {
 		_ = i //TODO: idomatic handling of this?
