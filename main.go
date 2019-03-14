@@ -15,7 +15,6 @@ import (
 
 /*
  * TODO: Readme
- * TODO: Tests
  */
 
 // CreateHash returns an sha1 hash of string.
